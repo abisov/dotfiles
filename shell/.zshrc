@@ -1,9 +1,12 @@
 # === PATH Setup ===
-export PATH="/opt/homebrew/bin:$PATH"
-
-# === Plugins ===
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Conditional Homebrew paths for macOS/Linux
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PATH="/opt/homebrew/bin:$PATH"
+    HOMEBREW_PREFIX="/opt/homebrew"
+else
+    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+    HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+fi
 
 # === Completion ===
 autoload -Uz compinit
@@ -11,6 +14,15 @@ compinit
 
 # Load completion menu
 zmodload zsh/complist
+
+# === Plugins ===
+# Load plugins after zsh initialization
+if [[ -f "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+if [[ -f "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+    source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
 # === History ===
 HISTFILE=~/.zsh_history
@@ -70,7 +82,9 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias lg="lazygit" 
 alias grep="grep --color=auto"
-
+alias x5="cd ~/projects/xnet/x5/web-bff-monorepo"
+alias dotf="cd ~/projects/dotfiles/"
+alias nvc="cd ~/projects/dotfiles/nvim"
 # === Useful tools ===
 # zoxide initialization
 if command -v zoxide >/dev/null 2>&1; then
@@ -80,15 +94,15 @@ fi
 alias docker="/Applications/Docker.app/Contents/Resources/bin/docker"
 alias blender="/Applications/Blender.app/Contents/MacOS/Blender"
 export NVM_DIR="$HOME/.nvm"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export PATH=$PATH:/usr/local/bin 
 alias python=/usr/bin/python3
 
 export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 # TODO: Set PULUMI_CONFIG_PASSPHRASE environment variable
-export PATH="/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ruby/bin:$HOMEBREW_PREFIX/lib/ruby/gems/3.4.0/bin:$PATH"
 alias xcodetui="$HOME/Projects/tuis/XcodeTUI/.build/debug/XcodeTUI"
 
 # === tmux auto-start ===
@@ -96,3 +110,6 @@ alias xcodetui="$HOME/Projects/tuis/XcodeTUI/.build/debug/XcodeTUI"
 if [ -z "$TMUX" ] && [ -z "$VSCODE_INJECTION" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
     tmux attach-session -t default || tmux new-session -s default
 fi
+export NODE_OPTIONS="--max-old-space-size=4096"
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+export LIBGL_ALWAYS_INDIRECT=1

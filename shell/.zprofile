@@ -1,4 +1,9 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Homebrew setup - conditional for macOS/Linux
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
 # Setting PATH for Python 3.12
 # The original version is saved in .zprofile.pysave
