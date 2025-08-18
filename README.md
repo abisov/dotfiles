@@ -9,6 +9,8 @@ My personal dotfiles managed with GNU Stow.
   - [sesh](https://github.com/joshmedeski/sesh): `brew install joshmedeski/sesh/sesh`
   - [gum](https://github.com/charmbracelet/gum): `brew install gum`
   - [fzf](https://github.com/junegunn/fzf): `brew install fzf`
+  - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions): `brew install zsh-autosuggestions`
+  - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting): `brew install zsh-syntax-highlighting`
 
 ## Installation
 
@@ -25,6 +27,9 @@ My personal dotfiles managed with GNU Stow.
    
    # Install nvim configuration  
    stow nvim
+   
+   # Install zsh configuration
+   stow zsh
    ```
 
 3. Install tmux plugins:
@@ -34,6 +39,11 @@ My personal dotfiles managed with GNU Stow.
 4. Install nvim plugins:
    - Open nvim: `nvim`
    - Plugins should install automatically via Lazy.nvim
+
+5. Restart your shell or source zsh config:
+   ```bash
+   source ~/.zshrc
+   ```
 
 ## Tmux Configuration
 
@@ -75,6 +85,22 @@ git add nvim/.config/nvim
 git commit -m "Update nvim config"
 ```
 
+## Zsh Configuration
+
+Includes:
+- **Plugins**: zsh-autosuggestions, zsh-syntax-highlighting
+- **Vim mode**: Vi key bindings in command line
+- **Smart completion**: Enhanced tab completion with menu
+- **History**: Shared history between sessions (10,000 lines)
+- **Key bindings**: Ctrl+Space to accept suggestions
+- **Git completion**: Enhanced git command completion
+
+### Key Features:
+- `Ctrl+Space` - Accept autosuggestion
+- Vi mode for command line editing
+- Shared history across all zsh sessions
+- Smart case-insensitive completion
+
 ## Directory Structure
 
 ```
@@ -85,9 +111,15 @@ git commit -m "Update nvim config"
 │           ├── tmux.conf
 │           └── plugins/
 │               └── tpm/ (submodule)
-└── nvim/
-    └── .config/
-        └── nvim/ (submodule -> aqua-vim repo)
+├── nvim/
+│   └── .config/
+│       └── nvim/ (submodule -> aqua-vim repo)
+└── zsh/
+    ├── .zshrc
+    ├── .zprofile
+    └── .zsh/
+        ├── _git
+        └── git-completion.bash
 ```
 
 ## Uninstalling
@@ -97,4 +129,5 @@ To remove symlinks:
 cd ~/dotfiles
 stow -D tmux
 stow -D nvim
+stow -D zsh
 ```
