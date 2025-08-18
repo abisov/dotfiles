@@ -12,20 +12,28 @@ My personal dotfiles managed with GNU Stow.
 
 ## Installation
 
-1. Clone this repository:
+1. Clone this repository with submodules:
    ```bash
-   git clone <your-repo-url> ~/dotfiles
+   git clone --recurse-submodules <your-repo-url> ~/dotfiles
    cd ~/dotfiles
    ```
 
-2. Install tmux configuration:
+2. Install configurations:
    ```bash
+   # Install tmux configuration
    stow tmux
+   
+   # Install nvim configuration  
+   stow nvim
    ```
 
 3. Install tmux plugins:
    - Open tmux: `tmux`
    - Press `Ctrl+A + I` to install plugins via TPM
+
+4. Install nvim plugins:
+   - Open nvim: `nvim`
+   - Plugins should install automatically via Lazy.nvim
 
 ## Tmux Configuration
 
@@ -52,16 +60,34 @@ My personal dotfiles managed with GNU Stow.
 - tmux-gruvbox (theme)
 - tmux-floax
 
+## Neovim Configuration
+
+The nvim configuration is managed as a separate repository ([aqua-vim](https://github.com/abisov/aqua-vim)) included as a git submodule. This approach allows:
+- Independent development of the nvim config
+- Version control of nvim config changes
+- Easy updates via git submodule commands
+
+### Updating nvim config:
+```bash
+cd ~/dotfiles
+git submodule update --remote nvim/.config/nvim
+git add nvim/.config/nvim
+git commit -m "Update nvim config"
+```
+
 ## Directory Structure
 
 ```
 ~/dotfiles/
-└── tmux/
+├── tmux/
+│   └── .config/
+│       └── tmux/
+│           ├── tmux.conf
+│           └── plugins/
+│               └── tpm/ (submodule)
+└── nvim/
     └── .config/
-        └── tmux/
-            ├── tmux.conf
-            └── plugins/
-                └── tpm/
+        └── nvim/ (submodule -> aqua-vim repo)
 ```
 
 ## Uninstalling
@@ -70,4 +96,5 @@ To remove symlinks:
 ```bash
 cd ~/dotfiles
 stow -D tmux
+stow -D nvim
 ```
