@@ -27,7 +27,14 @@ fi
 # Install required tools
 echo "📦 Installing required tools..."
 brew install stow
-brew install joshmedeski/sesh/sesh
+
+# Handle sesh installation (may need to switch taps)
+if brew list sesh >/dev/null 2>&1; then
+    echo "  ✅ sesh already installed"
+else
+    brew install joshmedeski/sesh/sesh
+fi
+
 brew install gum
 brew install fzf
 brew install zsh-autosuggestions
