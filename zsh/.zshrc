@@ -1,9 +1,21 @@
 # === PATH Setup ===
-export PATH="/opt/homebrew/bin:$PATH"
+# Conditional Homebrew paths for macOS/Linux
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PATH="/opt/homebrew/bin:$PATH"
+    HOMEBREW_PREFIX="/opt/homebrew"
+elif [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
+    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+    HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+fi
 
 # === Plugins ===
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Load plugins after zsh initialization
+if [[ -f "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+if [[ -f "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+    source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
 # === Completion ===
 autoload -Uz compinit
@@ -70,10 +82,19 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias lg="lazygit" 
 alias grep="grep --color=auto"
-alias wild="cd ~/Projects/wildstate/"
-alias wildios="cd ~/Projects/wildstate/wild"
-alias wildapi="cd ~/Projects/wildstate/wild-api"
-alias nvc="cd ~/.config/nvim/"
+# OS-specific aliases
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS aliases
+    alias wild="cd ~/Projects/wildstate/"
+    alias wildios="cd ~/Projects/wildstate/wild"
+    alias wildapi="cd ~/Projects/wildstate/wild-api"
+    alias nvc="cd ~/.config/nvim/"
+else
+    # Linux aliases
+    alias x5="cd ~/projects/xnet/x5/web-bff-monorepo"
+    alias dotf="cd ~/projects/dotfiles/"
+    alias nvc="cd ~/projects/dotfiles/nvim"
+fi
 # === Useful tools ===
 # zoxide initialization
 if command -v zoxide >/dev/null 2>&1; then
@@ -81,18 +102,54 @@ if command -v zoxide >/dev/null 2>&1; then
 fi
 
 
-alias blender="/Applications/Blender.app/Contents/MacOS/Blender"
+# OS-specific application aliases
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias blender="/Applications/Blender.app/Contents/MacOS/Blender"
+    alias docker="/Applications/Docker.app/Contents/Resources/bin/docker"
+fi
+# NVM setup - OS specific
 export NVM_DIR="$HOME/.nvm"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS with Homebrew NVM
+    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+    [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+else
+    # Linux with standard NVM installation
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+fi
 export PATH=$PATH:/usr/local/bin 
 alias python=/usr/bin/python3
 
-export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+# OS-specific Python paths
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+fi
 export PATH="$HOME/.local/bin:$PATH"
-export PULUMI_CONFIG_PASSPHRASE="Pavgo1-paxnit-byxdij"
-export PATH="/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:$PATH"
-alias xcodetui="/Users/ab-macbook/Projects/tuis/XcodeTUI/.build/debug/XcodeTUI"
+# OS-specific configurations
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS specific
+    export PULUMI_CONFIG_PASSPHRASE="Pavgo1-paxnit-byxdij"
+else
+    # Linux specific
+    # TODO: Set PULUMI_CONFIG_PASSPHRASE environment variable
+fi
+
+# Ruby path (works on both systems)
+if [[ -n "$HOMEBREW_PREFIX" ]]; then
+    export PATH="$HOMEBREW_PREFIX/opt/ruby/bin:$HOMEBREW_PREFIX/lib/ruby/gems/3.4.0/bin:$PATH"
+fi
+
+# Linux specific configurations
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    export NODE_OPTIONS="--max-old-space-size=4096"
+    export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+    export LIBGL_ALWAYS_INDIRECT=1
+fi
+# macOS specific development tools
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias xcodetui="/Users/ab-macbook/Projects/tuis/XcodeTUI/.build/debug/XcodeTUI"
+fi
 
 # === tmux auto-start ===
 # Auto-start tmux if not already in tmux and not in VS Code terminal
@@ -116,4 +173,8 @@ zle     -N             sesh-sessions
 bindkey -M emacs '\es' sesh-sessions
 bindkey -M vicmd '\es' sesh-sessions
 bindkey -M viins '\es' sesh-sessions
-export PATH="/Users/ab-macbook/tmux-tinycode/bin:$PATH"
+# macOS specific tools
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PATH="/Users/ab-macbook/tmux-tinycode/bin:$PATH"
+fi
+
