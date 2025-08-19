@@ -14,10 +14,28 @@ My personal dotfiles managed with GNU Stow.
 
 ## Installation
 
+### Quick Setup (Recommended)
+
 1. Clone this repository with submodules:
    ```bash
    git clone --recurse-submodules <your-repo-url> ~/dotfiles
    cd ~/dotfiles
+   ```
+
+2. Run the automated install script:
+   ```bash
+   ./install.sh
+   ```
+
+That's it! The script will install all prerequisites and set up your dotfiles automatically.
+
+### Manual Installation
+
+If you prefer to install manually:
+
+1. Install prerequisites:
+   ```bash
+   brew install stow joshmedeski/sesh/sesh gum fzf zsh-autosuggestions zsh-syntax-highlighting
    ```
 
 2. Install configurations:
@@ -33,14 +51,12 @@ My personal dotfiles managed with GNU Stow.
    ```
 
 3. Install tmux plugins:
-   - Open tmux: `tmux`
-   - Press `Ctrl+A + I` to install plugins via TPM
+   ```bash
+   git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+   ~/.config/tmux/plugins/tpm/bin/install_plugins
+   ```
 
-4. Install nvim plugins:
-   - Open nvim: `nvim`
-   - Plugins should install automatically via Lazy.nvim
-
-5. Restart your shell or source zsh config:
+4. Restart your shell:
    ```bash
    source ~/.zshrc
    ```
@@ -69,6 +85,7 @@ My personal dotfiles managed with GNU Stow.
 - tmux-fzf-url
 - tmux-gruvbox (theme)
 - tmux-floax
+- tmux-tinycode (AI assistant for tmux)
 
 ## Neovim Configuration
 
@@ -111,6 +128,12 @@ Includes:
 │           ├── tmux.conf
 │           └── plugins/
 │               └── tpm/ (submodule)
+├── tmux-tinycode/ (submodule)
+│   ├── bin/
+│   │   └── tinycode
+│   ├── Sources/
+│   ├── tinycode.tmux
+│   └── README.md
 ├── nvim/
 │   └── .config/
 │       └── nvim/ (submodule -> aqua-vim repo)
