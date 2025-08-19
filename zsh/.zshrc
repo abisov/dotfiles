@@ -71,7 +71,7 @@ zle -N edit-command-line
 bindkey '^X^E' edit-command-line
 
 # === Prompt ===
-eval "$(oh-my-posh init zsh --config ~/.config/tokyonight_storm.omp.json)"
+eval "$(oh-my-posh init zsh --config https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/gruvbox.omp.json)"
 
 # === Aliases ===
 alias cat="bat"
