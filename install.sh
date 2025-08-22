@@ -39,6 +39,7 @@ brew install gum
 brew install fzf
 brew install zsh-autosuggestions
 brew install zsh-syntax-highlighting
+brew install posting
 
 # Install configurations using stow
 echo "🔗 Creating symlinks with stow..."
@@ -59,6 +60,12 @@ fi
 if [[ -d "zsh" ]]; then
     echo "  📁 Installing zsh config..."
     stow zsh
+fi
+
+# Install posting configuration
+if [[ -d "posting" ]]; then
+    echo "  📁 Installing posting config..."
+    stow posting
 fi
 
 # Install tmux plugins
