@@ -1,6 +1,7 @@
 # === Early Setup ===
-# Fix terminal for lazygit and other TUI apps
-export TERM=${TERM:-xterm-256color}
+# Terminal and color support - optimized for kitty
+export TERM=${TERM:-xterm-kitty}
+export COLORTERM=truecolor
 
 # Set up fpath before anything else
 fpath=(~/.zsh $fpath)
@@ -85,11 +86,11 @@ zle -N edit-command-line
 bindkey '^X^E' edit-command-line
 
 # === Prompt ===
-# Use local theme file instead of remote URL
-if [[ -f ~/.config/gruvbox.omp.json ]]; then
-    eval "$(oh-my-posh init zsh --config ~/.config/gruvbox.omp.json)"
+# Use local Catppuccin Mocha theme
+if [[ -f ~/.config/catppuccin-mocha.omp.json ]]; then
+    eval "$(oh-my-posh init zsh --config ~/.config/catppuccin-mocha.omp.json)"
 else
-    eval "$(oh-my-posh init zsh --config https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/gruvbox.omp.json)"
+    eval "$(oh-my-posh init zsh --config https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/catppuccin_mocha.omp.json)"
 fi
 
 # === Aliases ===
@@ -189,6 +190,34 @@ bindkey -M viins '\es' sesh-sessions
 # === Load syntax highlighting LAST ===
 if [[ -f "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
     source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    
+    # Configure syntax highlighting colors to work with any theme
+    ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
+    ZSH_HIGHLIGHT_STYLES[default]=none
+    ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=red
+    ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=blue
+    ZSH_HIGHLIGHT_STYLES[alias]=fg=green
+    ZSH_HIGHLIGHT_STYLES[builtin]=fg=green
+    ZSH_HIGHLIGHT_STYLES[function]=fg=green
+    ZSH_HIGHLIGHT_STYLES[command]=fg=green
+    ZSH_HIGHLIGHT_STYLES[precommand]=fg=green
+    ZSH_HIGHLIGHT_STYLES[commandseparator]=none
+    ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=green
+    ZSH_HIGHLIGHT_STYLES[path]=none
+    ZSH_HIGHLIGHT_STYLES[globbing]=fg=blue
+    ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=blue
+    ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
+    ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
+    ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
+    ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=yellow
+    ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=yellow
+    ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=fg=yellow
+    ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=cyan
+    ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=cyan
+    ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=fg=cyan
+    ZSH_HIGHLIGHT_STYLES[assign]=none
+    ZSH_HIGHLIGHT_STYLES[redirection]=none
+    ZSH_HIGHLIGHT_STYLES[comment]=fg=black,bold
 fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
