@@ -118,6 +118,16 @@ else
     alias x5="cd ~/projects/xnet/x5/web-bff-monorepo"
     alias dotf="cd ~/projects/dotfiles/"
     alias nvc="cd ~/projects/dotfiles/nvim"
+    
+    # Hyprland workspace management
+    change-workspace-dp() {
+        if [[ $# -ne 2 ]]; then
+            echo "Usage: change-workspace-dp <workspace_number> <monitor_name>"
+            echo "Example: change-workspace-dp 3 DP-2"
+            return 1
+        fi
+        hyprctl dispatch moveworkspacetomonitor $1 $2
+    }
 fi
 
 # === Tool Initialization ===
